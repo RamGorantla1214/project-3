@@ -1,0 +1,100 @@
+
+spring:
+  application:
+    name: ${ram.application.name}
+  profiles:
+    active:  @activatedProperties@
+
+  http:
+    encoding:
+      charset:  UTF-8
+      enabled:  true
+      force:  true
+      force-request:  true
+      force-response:  true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    deserialization:
+      #允许对象忽略json中不存在的属性
+      fail_on_unknown_properties: false
+    parser:
+      #允许出现特殊字符和转义符
+      allow_unquoted_control_chars: true
+      #允许出现单引号
+      allow_single_quotes: true
+
+  mvc:
+    throw-exception-if-no-handler-found:  true
+
+  resources:
+    add-mappings:  false
+
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name:  com.mysql.cj.jdbc.Driver
+    url:  jdbc:mysql://${ram.application.datasource.ip}:${ram.application.datasource.port}/${ram.application.datasource.database}?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username:  ${ram.application.datasource.username}
+    password:  ${ram.application.datasource.password}
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 50
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: DatebookHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+  redis:
+    database: ${ram.application.redis.database}
+    host: ${ram.application.redis.host}
+    port: ${ram.application.redis.port}
+    password: ${ram.application.redis.password}
+  kafka:
+    bootstrap-servers: ${ram.application.kafka.servers}
+    consumer:
+      group-id: ${ram.application.kafka.group-id}
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  messages:
+    basename: i18n.ram-rbac,i18n.ram-config-web,i18n.ram-common,i18n.ram-captcha
+    encoding: UTF-8
+
+server:
+  port:  ${ram.application.http.port}
+  tomcat:
+    max-threads: ${ram.application.server.max-threads}
+    max-connections: ${ram.application.server.max-connections}
+    accept-count: ${ram.application.server.accept-count}
+  shutdown: graceful
+  compression:
+    enabled: true
+    mime-types: application/javascript,text/css
+
+mybatis-plus:
+  mapper-locations: classpath*:/sql/mysql/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔\
+  type-aliases-package: top.beanshell.**.model.pojo
+  type-enums-package: top.beanshell.**.model.enums
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 2
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: true
+    #数据库大写下划线转换
+    #capital-mode: true
+    #序列接口实现类配置,不在推荐使用此方式进行配置,请使用自定义bean注入
+    key-generator: com.baomidou.mybatisplus.incrementer.H2KeyGenerator
+    # SQL 解析缓存，开启后多租户 @SqlParser 注解生效
+    sql-parser-cache: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+# 日志配置
+logging:
+  config:  classpath:log4j2.xml

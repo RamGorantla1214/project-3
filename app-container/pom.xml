@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>ddf</artifactId>
+        <groupId>fds</groupId>
+        <version>wee</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>app-container</artifactId>
+
+    <description>Webapp 启动器</description>
+
+    <properties>
+        <profiles.dir>src/main/profiles</profiles.dir>
+    </properties>
+
+    <dependencies>
+
+        <!-- mysql 驱动 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!-- rbac 依赖 -->
+        <dependency>
+            <groupId>top.beanshell</groupId>
+            <artifactId>ram-rbac-simple-auth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>top.beanshell</groupId>
+            <artifactId>ram-rbac-endpoint</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>top.beanshell</groupId>
+            <artifactId>ram-rbac-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>top.beanshell</groupId>
+            <artifactId>ram-rbac-dao-mybatis</artifactId>
+        </dependency>
+
+        <!-- ram-captcha图形校验码依赖 -->
+        <dependency>
+            <groupId>top.beanshell</groupId>
+            <artifactId>ram-captcha-service</artifactId>
+        </dependency>
+
+        <!-- 通用类模块 -->
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>app-common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <!-- 自定义配置 -->
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>app-config</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <!-- 业务模块 -->
+        <!-- 此处增加自己实现的业务功能模块 -->
+
+
+    </dependencies>
+
+    <!-- 不同环境，加载不同配置文件 -->
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <activatedProperties>dev</activatedProperties>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <resources>
+                    <resource>
+                        <filtering>true</filtering>
+                        <directory>${profiles.dir}/dev</directory>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <profile>
+            <id>uat</id>
+            <properties>
+                <activatedProperties>uat</activatedProperties>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <filtering>true</filtering>
+                        <directory>${profiles.dir}/uat</directory>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <activatedProperties>prod</activatedProperties>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <filtering>true</filtering>
+                        <directory>${profiles.dir}/prod</directory>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <!-- jar包漏洞依赖检测 -->
+        <profile>
+            <id>owasp</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.owasp</groupId>
+                        <artifactId>dependency-check-maven</artifactId>
+                        <version>5.2.2</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <build>
+
+        <finalName>${project.parent.artifactId}-${project.parent.version}-${activatedProperties}-${timestamp}</finalName>
+        <resources>
+            <!--  不同环境，打包不同配置文件  -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>application.yml</include>
+                    <include>static/*</include>
+                    <include>templates/*</include>
+                    <include>banner.txt</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <layout>ZIP</layout>
+                    <outputDirectory>${project.parent.basedir}/target/jar</outputDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <configuration>
+                    <timestampFormat>yyyyMMddHHmm</timestampFormat>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>create-timestamp</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <inherited>false</inherited>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>utf-8</encoding>
+                    <useDefaultDelimiters>false</useDefaultDelimiters>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <outputDirectory>${project.parent.basedir}/target/tar</outputDirectory>
+                    <descriptors>
+                        <descriptor>./assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <developers>
+        <developer>
+            <email>mobinchao@hotmail.com</email>
+        </developer>
+    </developers>
+</project>

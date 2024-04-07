@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.12.RELEASE</version>
+        <!-- lookup parent from repository -->
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fds</groupId>
+    <artifactId>ddf</artifactId>
+    <name>ddf</name>
+    <packaging>pom</packaging>
+    <version>wee</version>
+
+    <description>Archetype for Ram project with mybatis.</description>
+
+    <url>https://www.beanshell.top</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>https://github.com/mbc3320/ram-webapp-with-mybatis.git</connection>
+        <url>https://github.com/mbc3320/ram-webapp-with-mybatis</url>
+    </scm>
+    <developers>
+        <developer>
+            <email>mobinchao@hotmail.com</email>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/mbc3320/ram-webapp-with-mybatis/issues</url>
+    </issueManagement>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <ram-bom.version>1.0.2</ram-bom.version>
+        <ram-common.version>1.1.0</ram-common.version>
+        <ram-config-web.version>1.1.0</ram-config-web.version>
+        <ram-config-redis.version>1.0.2</ram-config-redis.version>
+        <ram-config-mybatis.version>1.0.2</ram-config-mybatis.version>
+        <ram-rbac.version>1.1.0</ram-rbac.version>
+        <ram-captcha.version>1.0.0</ram-captcha.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-bom</artifactId>
+                <version>${ram-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-common</artifactId>
+                <version>${ram-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-config-web</artifactId>
+                <version>${ram-config-web.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-config-redis</artifactId>
+                <version>${ram-config-redis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-config-mybatis</artifactId>
+                <version>${ram-config-mybatis.version}</version>
+            </dependency>
+            <!-- ram rbac dependencies -->
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-rbac-api</artifactId>
+                <version>${ram-rbac.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-rbac-api-custom</artifactId>
+                <version>${ram-rbac.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-rbac-common</artifactId>
+                <version>${ram-rbac.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-rbac-endpoint</artifactId>
+                <version>${ram-rbac.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-rbac-service</artifactId>
+                <version>${ram-rbac.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-rbac-dao-mybatis</artifactId>
+                <version>${ram-rbac.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-rbac-simple-auth</artifactId>
+                <version>${ram-rbac.version}</version>
+            </dependency>
+
+            <!-- ram-captcha dependencies -->
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-captcha-common</artifactId>
+                <version>${ram-captcha.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-captcha-api</artifactId>
+                <version>${ram-captcha.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.beanshell</groupId>
+                <artifactId>ram-captcha-service</artifactId>
+                <version>${ram-captcha.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- deploy config of nexus repository -->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+<modules>  <module>app-api</module>
+    <module>app-container</module>
+    <module>app-test</module>
+    <module>app-config</module>
+    <module>app-service</module>
+    <module>app-endpoint</module>
+    <module>app-common</module>
+  </modules>
+</project>

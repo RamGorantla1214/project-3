@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<assembly>
+    <id>assembly</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <fileSets>
+        <!-- 启动脚本 -->
+        <fileSet>
+            <directory>${project.parent.basedir}/doc/shell</directory>
+            <outputDirectory>bin</outputDirectory>
+            <directoryMode>0777</directoryMode>
+            <includes>
+                <include>**/*</include>
+            </includes>
+            <!-- 修改文件权限 -->
+            <fileMode>0777</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+        <!-- 打包配置文件到conf目录 -->
+        <fileSet>
+            <directory>${project.build.directory}/classes/</directory>
+            <outputDirectory>conf</outputDirectory>
+            <includes>
+                <include>*-sample.properties</include>
+            </includes>
+            <fileMode>0777</fileMode>
+            <lineEnding>unix</lineEnding>
+        </fileSet>
+        <!-- 将项目启动器jar打包到boot目录中 -->
+        <fileSet>
+            <directory>${project.parent.basedir}/target/jar</directory>
+            <outputDirectory></outputDirectory>
+            <fileMode>0777</fileMode>
+            <includes>
+                <include>${project.parent.artifactId}-${project.parent.version}-${activatedProperties}-*.jar</include>
+            </includes>
+        </fileSet>
+        <!-- 数据库脚本 -->
+        <fileSet>
+            <directory>${project.parent.basedir}/doc/sql</directory>
+            <outputDirectory>sql</outputDirectory>
+            <directoryMode>0777</directoryMode>
+            <includes>
+                <include>**/*.sql</include>
+            </includes>
+            <fileMode>0777</fileMode>
+        </fileSet>
+    </fileSets>
+</assembly>
